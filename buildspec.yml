@@ -1,0 +1,13 @@
+version: 0.1
+phases:
+  install:
+    runtime-versions:
+      python: 3.8
+  build:
+    commands:
+#      - pip3 install --target ./package boto3
+#      - zip -r9 function.zip ./package
+      - zip lambda.zip imageConsumer.py
+artifacts:
+  files:
+    lambda.zip
