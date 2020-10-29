@@ -3,18 +3,16 @@ import boto3
 import base64
 
 def lambda_handler(event, context):
-    print(event)
-
     s3 = boto3.resource('s3')
     sns = boto3.client('sns')
 
     for record in event['Records']:
         # Read the image message (extended message)
-        print (f'{record} {type(record)}')
+        print (f' RECORD: {record} {type(record)}')
         body = record['body']
-        print(f'{body} {type(body)}')
+        print(f' BODY: {body} {type(body)}')
         extendedMessage = json.loads(body)
-        print(f'{extendedMessage} {type(extendedMessage)}')
+        print(f' EXTENDED MESSAGE: {extendedMessage} {type(extendedMessage)}')
 
         bucketName = extendedMessage[1]['s3BucketName']
         itemName = extendedMessage[1]['s3Key']
