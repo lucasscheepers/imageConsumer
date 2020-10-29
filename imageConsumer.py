@@ -39,3 +39,4 @@ def lambda_handler(event, context):
         # Delete the S3 content of the extended message
         srcObj.delete()
         print(f'Extended message body deleted {bucketName}:{itemName}')
+
