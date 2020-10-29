@@ -8,7 +8,7 @@ phases:
     commands:
       - echo building
       - zip -r output.zip imageConsumer.py
-      - $(aws lambda update-function-code --function-name imageConsumer --zip-file fileb://./output.zip --publish | jq '.Version')
+      - aws lambda update-function-code --function-name imageConsumer --zip-file fileb://./output.zip --publish | jq '.Version'
       - new_version=$(aws lambda update-function-code --function-name imageConsumer --zip-file fileb://./output.zip --publish | jq '.Version')
       - current_version=$(aws lambda get-alias --function-name imageConsumer --name Prod | jq '.FunctionVersion')
   post_build:
