@@ -40,3 +40,4 @@ def lambda_handler(event, context):
         srcObj.delete()
         print(f'Extended message body deleted {bucketName}:{itemName}')
 
+
