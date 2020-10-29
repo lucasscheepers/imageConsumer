@@ -17,4 +17,4 @@ phases:
       - echo current version is $current_version
       - printf '{"version":0.0,"Resources":[{"consumerImage":{"Type":"AWS::Lambda::Function","Properties":{"Name":"consumerImage","Alias":"prod","CurrentVersion":%s,"TargetVersion":%s}}}]}' $current_version $new_version > appspec.json
       - aws s3 cp appspec.json s3://sqs-images-test/appspec.json
-      - aws deploy create-deployment --application-name Test-Lambda --deployment-group-name Test-Lambda --s3-location bucket=sqs-images-test,bundleType=JSON,key=appspec.json
+      - aws deploy create-deployment --application-name Test-Deployment-Lambda --deployment-group-name Test-Deployment-Lambda --s3-location bucket=sqs-images-test,bundleType=JSON,key=appspec.json
