@@ -1,13 +1,20 @@
 version: 0.1
+
 phases:
-  install:
-    runtime-versions:
-      python: 3.8
+  pre_build:
+    commands:
+      - echo testing
   build:
     commands:
-#      - pip3 install --target ./package boto3
-#      - zip -r9 function.zip ./package
-      - zip lambda.zip imageConsumer.py
-artifacts:
-  files:
-    lambda.zip
+      - echo building
+      - zip -r output.zip imageConsumer.py
+      - new_version=$(aws lambda update-function-code --function-name imageConsumer --zip-file fileb://./output.zip --publish | jq '.Version')
+      - current_version=$(aws lambda get-alias --function-name imageConsumer --name prod | jq '.FunctionVersion')
+  post_build:
+    commands:
+      - echo "values are"
+      - echo new version is $new_version
+      - echo current version is $current_version
+      - printf '{"version":0.0,"Resources":[{"consumerImage":{"Type":"AWS::Lambda::Function","Properties":{"Name":"consumerImage","Alias":"prod","CurrentVersion":%s,"TargetVersion":%s}}}]}' $current_version $new_version > appspec.json
+      - aws s3 cp appspec.json s3://sqs-images-test/appspec.json
+      - aws deploy create-deployment --application-name Test-Lambda --deployment-group-name Test-Lambda --s3-location bucket=sqs-images-test,bundleType=JSON,key=appspec.json
