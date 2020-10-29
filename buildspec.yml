@@ -1,9 +1,6 @@
 version: 0.2
 
 phases:
-#  install:
-#    runtime-versions:
-#      python: 3.8
   pre_build:
     commands:
       - echo testing
@@ -19,6 +16,6 @@ phases:
       - echo "values are"
       - echo new version is $new_version
       - echo current version is $current_version
-      - printf '{"version":0.0,"Resources":[{"consumerImage":{"Type":"AWS::Lambda::Function","Properties":{"Name":"consumerImage","Alias":"Prod","CurrentVersion":%s,"TargetVersion":%s}}}]}' $current_version $new_version > appspec.json
+      - printf '{"version":0.0,"Resources":[{"imageConsumer":{"Type":"AWS::Lambda::Function","Properties":{"Name":"imageConsumer","Alias":"Prod","CurrentVersion":%s,"TargetVersion":%s}}}]}' $current_version $new_version > appspec.json
       - aws s3 cp appspec.json s3://sqs-images-test/appspec.json
       - aws deploy create-deployment --application-name Test-Application-Lambda --deployment-group-name Test-Deployment-Lambda --s3-location bucket=sqs-images-test,bundleType=JSON,key=appspec.json
